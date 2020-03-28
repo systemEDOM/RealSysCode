@@ -1,12 +1,12 @@
 import handlebars from "express-handlebars";
 
-const path = __dirname + '/../views/';
+const path = __dirname + '../views/';
 
-const hb = handlebars({
+const hbs = handlebars({
     defaultLayout: "app",
     extname: "hbs",
-    layoutsDir: path + "layouts",
+    layoutsDir: __dirname + "/../../views/layouts/",
     //partialsDir: path + "common"
 });
 
-module.exports = hb;
+module.exports = hbs;

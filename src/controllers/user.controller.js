@@ -1,18 +1,29 @@
-import User from '../schema/user.schema';
-import mongoose from 'mongoose';
+import UserRepository from '../repositories/UserRepository';
+const { validationResult } = require('express-validator');
 
 const UserController = {
-    getAll: function (req, res) {
-        const user = new User({
-            _id: mongoose.Types.ObjectId(),
-            name: "Daniel",
-            username: "system",
-            email: "codigito.c@gmail.com",
-            password: "system",
-        });
+    store: async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            req.flash('errors',  errors.array());
+            return res.redirect('/users/register');
+        }
 
-        user.save().then( result => res.send("saved") ).catch( error => res.send("error") );
+        UserRepository.create(req.body)
+            .then(newUser => {
+                req.flash('success',  "Account created successfully");
+                res.redirect("/users/login");
+            }).catch(error => {
+                req.flash('errors',  [{msg: "An error has occured"}]);
+                res.redirect("/users/register");
+            });
     },
+    register: async (req, res) => {
+        res.render("register");
+    },
+    login: async (req, res) => {
+        res.render("login");
+    }
 };
 
 module.exports = UserController;

@@ -10,11 +10,13 @@ let UserSchema = new Schema({
     username: {
         type: String,
         required: true,
+        unique: true,
         max: 50
     },
     email: {
         type: String,
         required: true,
+        unique: true,
         max: 150
     },
     password: {
