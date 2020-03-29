@@ -23,6 +23,11 @@ const UserController = {
     },
     login: async (req, res) => {
         res.render("login");
+    },
+    logout: async (req, res) => {
+        req.logout();
+        req.flash("success", "You are logged out now!");
+        res.redirect("/users/login");
     }
 };
 

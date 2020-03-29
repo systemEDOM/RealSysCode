@@ -5,16 +5,8 @@
                 <div class="card-content">
                     <span class="card-title">Register now!</span>
                     <div class="row">
-                        {{#if message.errors}}
-                            <div class="card red darken-3">
-                                <div class="card-content white-text">
-                                    <span class="card-title">Check these errors</span>
-                                    {{#each message.errors}}
-                                        <li>{{msg}}</li>
-                                    {{/each}}
-                                </div>
-                            </div>
-                        {{/if}}
+                        {{> success }}
+                        {{> errors }}
                         <form class="col s12" method="POST" action="/users/store">
                             <div class="row">
                                 <div class="input-field col s6">
