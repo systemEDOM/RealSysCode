@@ -1,0 +1,40 @@
+<div class="container">
+    {{#if message.errorNotFound}}
+    {{> errors }}
+    {{else}}
+    <div class="row">
+        {{> success }}
+        {{> errors }}
+        <div class="col s12 m5">
+            <div class="card grey lighten-2">
+                <div class="card-content">
+                    <span class="card-title">Information</span>
+                    <p>
+                        Name: <b>{{userFound.name}}</b>
+                    </p>
+                    <p>
+                        Username: <b>{{userFound.slugUsername}}</b>
+                    </p>
+                    <p>
+                        E-mail: <b>{{userFound.email}}</b>
+                    </p>
+                </div>
+                {{#compare user.username '==' userFound.username}}
+                {{> modal_update_user}}
+                <div class="card-action">
+                    <button class="blue waves-effect waves-light btn modal-trigger" data-target="modal_update_user">Update</button>
+                    <button class="blue waves-effect waves-light btn modal-trigger" data-target="modal_update_password_user">Update Password</button>
+                </div>
+                {{/compare}}
+            </div>
+        </div>
+        <div class="col s12 m7">
+            <div class="card grey lighten-2">
+                <div class="card-content">
+                    <span class="card-title">Snippets</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</div>

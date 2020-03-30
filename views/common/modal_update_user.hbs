@@ -1,0 +1,58 @@
+<div id="modal_update_user" class="modal">
+    <div class="modal-content">
+        <h4>Update your information</h4>
+        <form class="col s12" method="POST" action="/users/update?_method=PUT">
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="name" name="name" type="text" class="validate" value="{{user.name}}" required>
+                    <label for="name">Name</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="email" name="email" type="email" class="validate" value="{{user.email}}" required>
+                    <label for="email">E-mail</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="username" name="username" type="text" class="validate" value="{{user.slugUsername}}"
+                        required>
+                    <label for="username">Username</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light indigo darken-4" type="submit" name="action">
+                        Update
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modal_update_password_user" class="modal">
+    <div class="modal-content">
+        <h4>Update your password</h4>
+        <form class="col s12" method="POST" action="/users/update/password?_method=PUT">
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="password" name="password" type="password" class="validate" required>
+                    <label for="password">New Password</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="old_password" name="old_password" type="password" class="validate" required>
+                    <label for="old_password">Old Password (Confirm)</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light indigo darken-4" type="submit" name="action">
+                        Update Password
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

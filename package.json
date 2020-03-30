@@ -36,7 +36,8 @@
     "mongoose-url-slugs": "^1.0.2",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
-    "slug": "^2.1.1"
+    "slug": "^2.1.1",
+    "slugify": "^1.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0-rc.1",

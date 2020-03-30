@@ -17,12 +17,12 @@
 <body>
 	<nav class="white" role="navigation">
 		<div class="nav-wrapper container">
-			<a id="logo-container" href="#" class="brand-logo">RealSysCode</a>
+			<a id="logo-container" href="/" class="brand-logo">RealSysCode</a>
 			<ul class="right hide-on-med-and-down">
 				{{#if user}}
 				<li>
 					<a class='dropdown-trigger btn indigo darken-4' href='#' data-target='dropdown_user_menu'>
-						{{user.slugUsername}}<i class="material-icons right">arrow_drop_down</i>
+						{{user.name}}<i class="material-icons right">arrow_drop_down</i>
 					</a>
 				</li>
 				<li><a href="/users/logout">Logout</a></li>
@@ -33,15 +33,15 @@
 			</ul>
 
 			<ul id='dropdown_user_menu' class='dropdown-content'>
-				<li><a href="/users/profile/{{user.slugUsername}}">Profile</a></li>
-				<li><a href="/users/snippets/{{user.slugUsername}}">Snippets</a></li>
+				<li><a class="blue-text" href="/users/profile/{{user.slugUsername}}">Profile</a></li>
+				<li><a class="blue-text" href="/snippets/create">Create Snippet</a></li>
 			</ul>
 
 
 			<ul id="nav-mobile" class="sidenav">
 				{{#if user}}
 				<li><a href="/users/profile/{{user.slugUsername}}">Profile</a></li>
-				<li><a href="/users/snippets/{{user.slugUsername}}">Snippets</a></li>
+				<li><a href="/snippets/create">Create Snippet</a></li>
 				<li><a href="/users/logout">Logout</a></li>
 				{{else}}
 				<li><a href="/user/login">Login</a></li>
@@ -90,6 +90,7 @@
 	<script src="/js/materialize.js"></script>
 	<script src="/js/init.js"></script>
 	<script>
+		$('.modal').modal();
 		$('.dropdown-trigger').dropdown();
 	</script>
 </body>

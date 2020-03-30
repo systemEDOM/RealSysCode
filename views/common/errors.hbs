@@ -7,6 +7,15 @@
 </div>
 {{/if}}
 
+{{#if message.errorNotFound}}
+<div class="card red darken-3">
+    <div class="card-content white-text">
+        <span class="card-title">Error Not Found</span>
+        <li>{{message.error}}</li>
+    </div>
+</div>
+{{/if}}
+
 {{#if message.errors}}
 <div class="card red darken-3">
     <div class="card-content white-text">
