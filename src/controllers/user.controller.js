@@ -14,8 +14,7 @@ const UserController = {
                 req.flash('success',  "Account created successfully");
                 res.status(200).redirect("/users/login");
             }).catch(error => {
-                console.log(error);
-                req.flash('errors',  [{msg: "An error has occured"}]);
+                req.flash('error',  "An error has occured");
                 res.status(400).redirect("/users/register");
             });
     },

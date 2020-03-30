@@ -2,10 +2,9 @@ const sinon = require('sinon');
 const chai = require('chai');
 const bcrypt = require('bcrypt');
 
-const UserController = require('../src/controllers/user.controller');
-const UserRepository = require('../src/repositories/UserRepository');
-const UserSchema = require('../src/schema/user.schema');
-const UserValidation = require('../src/validations/user.validation');
+const UserController = require('../../src/controllers/user.controller');
+const UserRepository = require('../../src/repositories/UserRepository');
+const UserSchema = require('../../src/schema/user.schema');
 
 chai.use(require('sinon-chai'));
 
@@ -34,15 +33,14 @@ describe('User Controllers tests', () => {
         res = {
             status: sinon.stub().returns({ redirect: sinon.spy() }),
         };
-
-        sinon.stub(UserSchema, 'create').returns(expectedResult);
     });
 
-    after(function () {
+    afterEach(function () {
         sinon.restore();
     });
 
-    it('should be calling UserSchema.create with correct data and redirect to login at least one time', async () => {
+    it('should be calling UserSchema.create with correct data and redirect to /users/login at least one time', async () => {
+        sinon.stub(UserSchema, 'create').returns(expectedResult);
         await UserController.store(req, res);
 
         chai.expect(UserSchema.create).to.have.been.calledWith({
@@ -51,7 +49,15 @@ describe('User Controllers tests', () => {
             email: "test@test.com",
             password: "test",
         });
-        chai.expect(res.status).to.have.been.calledWith(200).callCount(1);
-        chai.expect(res.status().redirect).to.have.been.calledWith('/users/login').callCount(1);
+        chai.expect(res.status).to.have.been.calledWith(200);
+        chai.expect(res.status().redirect).to.have.been.calledWith('/users/login');
+    });
+
+    it('should be calling UserSchema.create and should be returning and error so on calling status(400) and redirect to /users/register', async () => {
+        sinon.stub(UserSchema, 'create').yields(new Error({ error: 'An error has ocurred' }));
+        await UserController.store(req, res);
+
+        chai.expect(res.status).to.have.been.calledWith(400);
+        chai.expect(res.status().redirect).to.have.been.calledWith('/users/register');
     });
 });
