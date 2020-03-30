@@ -30,8 +30,15 @@ let UserSchema = new Schema({
     }
 }, { timestamps: true });
 
+UserSchema.pre('save', async function(next) {
+    var user = this;
+    if (!user.isModified('password')) return next();
+    user.password = await bcrypt.hash(user.password, 10);
+    next();
+});
+
 UserSchema.methods = {
-    matchPassword: async function (password, cb) {
+    matchPassword: async function (password) {
         return await bcrypt.compare(password, this.password);
     }
 };

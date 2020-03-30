@@ -1,5 +1,4 @@
 import User from '../schema/user.schema';
-import bcryp from 'bcrypt';
 
 class UserRepository {
 
@@ -8,8 +7,15 @@ class UserRepository {
     }
 
     async create(userObject) {
-        userObject.password = await bcryp.hash(userObject.password, 10);
-        return this.model.create(userObject);
+        return await this.model.create(userObject);
+    }
+
+    async findOne(email) {
+        return await this.model.findOne({ email });
+    }
+
+    async findById(id, callback) {
+        return await this.model.findById(id);
     }
 }
 

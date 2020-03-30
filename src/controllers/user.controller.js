@@ -6,16 +6,17 @@ const UserController = {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             req.flash('errors',  errors.array());
-            return res.redirect('/users/register');
+            return res.status(400).redirect('/users/register');
         }
 
-        UserRepository.create(req.body)
+        await UserRepository.create(req.body)
             .then(newUser => {
                 req.flash('success',  "Account created successfully");
-                res.redirect("/users/login");
+                res.status(200).redirect("/users/login");
             }).catch(error => {
+                console.log(error);
                 req.flash('errors',  [{msg: "An error has occured"}]);
-                res.redirect("/users/register");
+                res.status(400).redirect("/users/register");
             });
     },
     register: async (req, res) => {

@@ -8,7 +8,7 @@ passport.use(new Strategy({
     usernameField: 'email',
     passwordField: 'password',
 }, async (email, password, done) => {
-    await User.findOne({ email }).then( async user => {
+    await UserRepository.findOne(email).then( async user => {
         if (!user) {
             return done(null, false, { message: 'Not user found' })
         } else {
@@ -27,7 +27,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(async function (id, done) {
-    await User.findById(id, function (err, user) {
-        done(err, user);
+    await UserRepository.findById(id).then( (user, err) => {
+        done(err, user); 
     });
 });
