@@ -58,10 +58,20 @@ function getEditor(language) {
         autofocus: true,
         matchBrackets: true,
         styleActiveLine: true,
+        autoCloseBrackets: true,
     });
 
-    window.editor.on('change', function (cMirror) {
-        // get value right from instance
+    const onCursorActivity = (instance) => {
+        const cursor = editor.getCursor();
+        window.line = cursor.line + 1;
+        window.ch = ch + 1;
+        console.log(window.line, window.ch);
+    }
+
+    window.editor.on("cursorActivity", onCursorActivity);
+
+    window.editor.on('change', function (cMirror, changeObj) {
+        console.log("here", changeObj.to.line);
         $.ajax({
             url: '/snippets/updateByAjax/' + window.id,
             type: 'PUT',

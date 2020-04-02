@@ -28,8 +28,6 @@ if (process.env.NODE_ENV === 'development') {
   require('dotenv').config();
 }
 
-console.log(process.env.NODE_ENV); //console.log(process.env.MONGODB_URI);
-
 const db = require("./config/database");
 
 const MongoStore = require('connect-mongo')(_expressSession.default);
@@ -40,12 +38,15 @@ const server = require('http').Server(app);
 
 const io = require('socket.io')(server);
 
-app.use(_express.default.static(__dirname + "/../public/"));
-app.engine("hbs", _handlebars.default);
-app.set("view engine", "hbs");
 var mongoStore = new MongoStore({
   mongooseConnection: db
 });
+
+require('./realtime/editor')(io, _passport3.default, _passport.default, _cookieParser.default, mongoStore);
+
+app.use(_express.default.static(__dirname + "/../public/"));
+app.engine("hbs", _handlebars.default);
+app.set("view engine", "hbs");
 app.use(_bodyParser.default.urlencoded({
   extended: false
 }));
@@ -66,56 +67,6 @@ app.use((req, res, next) => {
   next();
 });
 app.use(_index.default);
-let sockets = {};
-let usersByRoom = {};
-io.use(_passport3.default.authorize({
-  key: 'connect.sid',
-  secret: "secret123",
-  passport: _passport.default,
-  cookieParser: _cookieParser.default,
-  store: mongoStore
-}));
-io.on('connection', function (socket) {
-  let currRoom = socket.request._query.snippetID;
-
-  if (!sockets[socket.request.user._id]) {
-    console.log("Client connected");
-    socket.room = currRoom;
-    sockets[socket.request.user._id] = socket;
-  } //socket.join(currRoom);
-  //console.log(io.sockets.adapter.rooms[currRoom], currRoom);
-  //socket.to(currRoom).emit('joined', { users: usersByRoom });
-
-
-  socket.on('create', function (room) {
-    socket.join(room);
-    Object.keys(io.sockets.adapter.rooms[currRoom].sockets).forEach(sock => {
-      let userByRoom = io.sockets.connected[sock].request.user;
-      usersByRoom[userByRoom._id] = userByRoom;
-    });
-    console.log(usersByRoom);
-    console.log("emiting...", room);
-    io.in(room).emit('joined', {
-      users: usersByRoom
-    });
-  });
-  socket.on('code_emit', function (eventData) {
-    if (socket.request.user && sockets[socket.request.user._id]) {
-      console.log(eventData.id);
-      socket.broadcast.to(eventData.id).emit("get_code_emit", eventData.value);
-    }
-  });
-  socket.on('disconnect', function (eventData) {
-    console.log("disconnected");
-    Object.keys(sockets).forEach(userId => {
-      let sock = sockets[userId];
-
-      if (sock.id == socket.id) {
-        sockets[userId] = null;
-      }
-    });
-  });
-});
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log(`Server is up and running on port: ${port}`);

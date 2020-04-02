@@ -49,6 +49,7 @@
 <script src="/addon/hint/anyword-hint.js"></script>
 <script src="/addon/display/placeholder.js"></script>
 <script src="/addon/selection/active-line.js"></script>
+<script src="/addon/edit/closebrackets.js"></script>
 <script src="/mode/htmlmixed/htmlmixed.js"></script>
 <script src="/mode/xml/xml.js"></script>
 <script src="/mode/javascript/javascript.js"></script>
@@ -58,6 +59,10 @@
 <script>
 	window.language = "{{snippet.language}}";
 	window.id = "{{snippet._id}}";
+	window.line = 0;
+	window.ch = 0;
+	window.lineBefore = 0;
+	window.chBefore = 0;
 </script>
 <script src="/js/load_editor.js"></script>
 <script>
@@ -66,15 +71,20 @@
 	socket.emit('create', window.id);
 
 	socket.on("get_code_emit", function (data) {
-		if (data != window.editor.getDoc().getValue())
+		if (data != window.editor.getDoc().getValue()) {
+			window.lineBefore = window.line;
+			window.chBefore = window.ch;
 			window.editor.getDoc().setValue(data);
+			window.editor.setCursor({line: window.lineBefore - 1, ch: window.chBefore - 1});
+			console.log(window.line, window.ch, "from emit");
+		}
 	});
 	socket.on("joined", function (data) {
 		console.log("getting data", data);
 		Object.values(data.users).forEach(user => {
-			if (!users_connected[user._id]) {
+			if (user !== null && !users_connected[user._id]) {
 				users_connected[user._id] = user;
-				let li = `<li class="collection-item">
+				let li = `<li class="collection-item" id="${user._id}">
 						<div>
 							<b>${user.name}</b>
 							<a href="#" class="secondary-content"><i class="material-icons">done</i></a>
@@ -83,6 +93,12 @@
 				$('#collection_users').append(li);
 			}
 		})
+	});
+
+	socket.on("unjoined", function (data) {
+		console.log("getting data unjoined", data);
+		$(`#${data.user}`).remove();
+		delete users_connected[data.user];
 	});
 </script>
 
