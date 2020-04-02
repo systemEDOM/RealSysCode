@@ -4,8 +4,6 @@ var _express = _interopRequireDefault(require("express"));
 
 var _bodyParser = _interopRequireDefault(require("body-parser"));
 
-var _database = _interopRequireDefault(require("./config/database"));
-
 var _handlebars = _interopRequireDefault(require("./config/handlebars"));
 
 var _index = _interopRequireDefault(require("./routes/index"));
@@ -26,7 +24,13 @@ var _passport3 = _interopRequireDefault(require("passport.socketio"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-require('dotenv').config();
+if (process.env.NODE_ENV === 'development') {
+  require('dotenv').config();
+}
+
+console.log(process.env.NODE_ENV); //console.log(process.env.MONGODB_URI);
+
+const db = require("./config/database");
 
 const MongoStore = require('connect-mongo')(_expressSession.default);
 
@@ -40,7 +44,7 @@ app.use(_express.default.static(__dirname + "/../public/"));
 app.engine("hbs", _handlebars.default);
 app.set("view engine", "hbs");
 var mongoStore = new MongoStore({
-  mongooseConnection: _database.default
+  mongooseConnection: db
 });
 app.use(_bodyParser.default.urlencoded({
   extended: false

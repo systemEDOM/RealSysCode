@@ -4,15 +4,16 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-let env = process.env.NODE_ENV || 'development';
+//let env = process.env.NODE_ENV || 'development';
+//let config = require('./mongo')[env];
 
-let config = require('./mongo')[env];
-
-let envUrl = process.env[config.use_env_variable];
+/*let envUrl = process.env[config.use_env_variable];
 let localUrl = `"mongodb://${config.host}:27017/${config.database}`;
-let mongoUrl = envUrl ? envUrl : localUrl;
 
-_mongoose.default.connect(mongoUrl, {
+let mongoUrl = envUrl ? envUrl : localUrl;*/
+console.log(process.env.MONGODB_URI);
+
+_mongoose.default.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true

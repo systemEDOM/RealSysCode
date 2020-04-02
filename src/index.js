@@ -1,6 +1,13 @@
+if (process.env.NODE_ENV === 'development') {
+    require('dotenv').config()
+}
+
+console.log(process.env.NODE_ENV);
+//console.log(process.env.MONGODB_URI);
+
 import express from "express";
 import bodyParser from "body-parser";
-import db from "./config/database";
+const db = require("./config/database");
 import hbs from "./config/handlebars";
 import routes from './routes/index';
 import flash from 'connect-flash';
@@ -10,8 +17,6 @@ import session from 'express-session';
 import methodOverride from 'method-override';
 import configPassport from './config/passport';
 import passportSocketIo from 'passport.socketio';
-
-require('dotenv').config()
 
 const MongoStore = require('connect-mongo')(session);
 const app = express();

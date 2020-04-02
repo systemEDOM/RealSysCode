@@ -4,8 +4,8 @@
   "description": "realsyscode is a project to share code in real time with more people through snippets.",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
-    "start:watch": "nodemon --exec babel-node src/index.js",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "start:watch": "cross-env NODE_ENV=development nodemon --exec babel-node src/index.js",
     "test": "./node_modules/.bin/mocha --require @babel/register --reporter spec tests/**/*.js",
     "build": "babel src --out-dir ./dist --source-maps"
   },
@@ -28,6 +28,7 @@
     "connect-mongo": "^3.2.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-handlebars": "^4.0.0",
