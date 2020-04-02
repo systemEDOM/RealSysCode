@@ -14,8 +14,16 @@ class UserRepository {
         return await this.model.updateOne({ _id }, userObject);
     }
 
+    async findOneAndUpdate(_id, userObject) {
+        return await this.model.findOneAndUpdate({ _id }, userObject);
+    }
+
     async updatePassword(password, _id) {
         return await User.updateOne({ _id }, { $set: { password } });
+    }
+
+    async snippetsByUser(_id) {
+        return await this.model.findOne({ _id }).populate("snippets");
     }
 
     async findOne(email) {

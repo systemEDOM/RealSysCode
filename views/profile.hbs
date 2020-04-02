@@ -22,8 +22,10 @@
                 {{#compare user.username '==' userFound.username}}
                 {{> modal_update_user}}
                 <div class="card-action">
-                    <button class="blue waves-effect waves-light btn modal-trigger" data-target="modal_update_user">Update</button>
-                    <button class="blue waves-effect waves-light btn modal-trigger" data-target="modal_update_password_user">Update Password</button>
+                    <button class="blue waves-effect waves-light btn modal-trigger"
+                        data-target="modal_update_user">Update</button>
+                    <button class="blue waves-effect waves-light btn modal-trigger"
+                        data-target="modal_update_password_user">Update Password</button>
                 </div>
                 {{/compare}}
             </div>
@@ -32,6 +34,23 @@
             <div class="card grey lighten-2">
                 <div class="card-content">
                     <span class="card-title">Snippets</span>
+                    <div class="row">
+                        <ul class="collection with-header">
+                            <li class="collection-header">
+                                <h4>Snippets Collection</h4>
+                            </li>
+                            {{#each snippetsByUser.snippets}}
+                            <li class="collection-item">
+                                <div>
+                                    <b>{{this.title}}</b>
+                                    <br>
+                                    {{this.short_description}}
+                                    <a href="/snippets/{{this.slug}}" class="secondary-content"><i class="material-icons">send</i></a>
+                                </div>
+                            </li>
+                            {{/each}}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

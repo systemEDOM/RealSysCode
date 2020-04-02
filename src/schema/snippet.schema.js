@@ -1,9 +1,11 @@
 import mongoose, { mongo } from "mongoose";
+import bcrypt from 'bcrypt';
 import slug from 'mongoose-url-slugs';
+import slugify from 'slugify';
 
 const Schema = mongoose.Schema;
 
-let UserSchema = new Schema({
+let SnippetSchema = new Schema({
     title: {
         type: String,
         required: true,
@@ -19,11 +21,12 @@ let UserSchema = new Schema({
         type: String,
         max: 20
     },
-    code: {
+    language: {
         type: String,
-        required: true,
-        max: 30,
-        min: 4
+        max: 30
+    },
+    code: {
+        type: String
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -31,6 +34,27 @@ let UserSchema = new Schema({
     }
 }, { timestamps: true });
 
-UserSchema.plugin(slug('title', { field: 'slug' }));
+SnippetSchema.pre('save', async function (next) {
+    if (this.password)
+        this.password = await bcrypt.hash(this.password, 10);
+    next();
+});
 
-module.exports = mongoose.model("Snippet", UserSchema);
+SnippetSchema.pre('updateOne', async function (next) {
+    if (this._update.$set.password)
+        this.set({ password: await bcrypt.hash(this._update.$set.password, 10) });
+
+    if (this._update.title)
+        this.set({ slug: slugify(this._update.title) });
+    next();
+});
+
+SnippetSchema.methods = {
+    matchPassword: async function (password) {
+        return await bcrypt.compare(password, this.password);
+    }
+};
+
+SnippetSchema.plugin(slug('title', { field: 'slug' }));
+
+module.exports = mongoose.model("Snippet", SnippetSchema);

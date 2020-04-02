@@ -1,0 +1,11 @@
+<select name="language" id="language" required>
+    <option value="" disabled selected>Choose your language</option>
+    <option {{#compare language '==' "c"}} selected {{/compare}} value="c">C</option>
+    <option {{#compare language '==' "cplusplus"}} selected {{/compare}} value="cplusplus">C++</option>
+    <option {{#compare language '==' "css"}} selected {{/compare}} value="css">CSS</option>
+    <option {{#compare language '==' "html"}} selected {{/compare}} value="html">HTML</option>
+    <option {{#compare language '==' "java"}} selected {{/compare}} value="java">Java</option>
+    <option {{#compare language '==' "javascript"}} selected {{/compare}} value="javascript">JavaScript</option>
+    <option {{#compare language '==' "php"}} selected {{/compare}} value="php">PHP</option>
+</select>
+<label for="language">Language</label>

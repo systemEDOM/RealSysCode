@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="row">
+        <div class="col s12 m12">
+            <div class="card ">
+                <div class="card-content">
+                    <span class="card-title">Create your snippet to share code now!</span>
+                    <div class="row">
+                        {{> success }}
+                        {{> errors }}
+                        <form class="col s12" method="POST" action="/snippets/store">
+                            <div class="row">
+                                <div class="input-field col s6">
+                                    <input id="title" name="title" type="text" class="validate" required>
+                                    <label for="title">Title</label>
+                                </div>
+                                <div class="input-field col s3">
+                                    {{> select_language }}
+                                </div>
+                                <div class="input-field col s3">
+                                    <input id="password" name="password" type="password" class="validate">
+                                    <label for="password">Password (Optional)</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <textarea name="short_description" id="short_description"
+                                        class="validate materialize-textarea" required></textarea>
+                                    <label for="short_description">Short description</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <button class="btn waves-effect waves-light indigo darken-4" type="submit"
+                                        name="action">
+                                        Create my snipptet
+                                        <i class="material-icons right">send</i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

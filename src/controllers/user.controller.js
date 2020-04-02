@@ -30,12 +30,13 @@ const UserController = {
         res.redirect("/users/login");
     },
     profile: async (req, res) => {
-        await UserRepository.findByUsername(req.params.username).then(userFound => {
+        await UserRepository.findByUsername(req.params.username).then( async userFound => {
             if (userFound === null) {
                 req.flash("errorNotFound", "An error has ocurred may be the user doesn't exist");
                 res.render('profile');
             } else {
-                res.render('profile', { userFound });
+                const snippetsByUser = await UserRepository.snippetsByUser(userFound._id);
+                res.render('profile', { userFound, snippetsByUser });
             }
         }).catch(error => {
             res.render('profile', { error: "An error has ocurred may be the user doesn't exist" });

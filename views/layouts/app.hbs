@@ -12,6 +12,8 @@
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link href="/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection" />
 	<link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	<link href="/css/main.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	{{{_sections.css}}}
 </head>
 
 <body>
@@ -52,9 +54,11 @@
 		</div>
 	</nav>
 
-	{{{body}}}
+	<main>
+		{{{body}}}
+	</main>
 
-	<footer class="page-footer indigo darken-4">
+	<footer class="page-footer grey darken-4">
 		<div class="container">
 			<div class="row">
 				<div class="col l6 s12">
@@ -92,7 +96,9 @@
 	<script>
 		$('.modal').modal();
 		$('.dropdown-trigger').dropdown();
+		$('select').formSelect();
 	</script>
+	{{{_sections.js}}}
 </body>
 
 </html>

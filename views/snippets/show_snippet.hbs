@@ -1,0 +1,89 @@
+{{#section 'css'}}
+<link rel="stylesheet" href="/css/codemirror.css">
+<link rel="stylesheet" href="/theme/material-darker.css">
+<link rel="stylesheet" href="/addon/hint/show-hint.css">
+<style>
+	.CodeMirror {
+		height: 650px;
+	}
+
+	.CodeMirror-empty.CodeMirror-focused {
+		outline: none;
+	}
+
+	.CodeMirror pre.CodeMirror-placeholder {
+		color: rgb(172, 172, 172);
+	}
+</style>
+{{/section}}
+
+<div class="row" style="margin-bottom: 0;">
+	<div class="col s12 m8" style="padding: 0;">
+		<textarea name="code" id="code" placeholder="Your code goes here...">{{snippet.code}}</textarea>
+	</div>
+	<div class="col s12 m4" style="padding: 0;">
+		<div class="card white" style="margin-top: 0; margin-bottom: 0; height: 650px;">
+			<div class="card-content">
+				<span class="card-title">People connected</span>
+				<form class="col s12" method="POST" action="/snippets/store">
+					<div class="row">
+						<div class="input-field col s12">
+							{{> select_language language=snippet.language}}
+						</div>
+					</div>
+				</form>
+
+				<ul class="collection" id="collection_users">
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+{{#section 'js'}}
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/codemirror.js"></script>
+<script src="/addon/edit/matchbrackets.js"></script>
+<script src="/addon/hint/show-hint.js"></script>
+<script src="/addon/hint/javascript-hint.js"></script>
+<script src="/addon/hint/anyword-hint.js"></script>
+<script src="/addon/display/placeholder.js"></script>
+<script src="/addon/selection/active-line.js"></script>
+<script src="/mode/htmlmixed/htmlmixed.js"></script>
+<script src="/mode/xml/xml.js"></script>
+<script src="/mode/javascript/javascript.js"></script>
+<script src="/mode/css/css.js"></script>
+<script src="/mode/php/php.js"></script>
+<script src="/mode/clike/clike.js"></script>
+<script>
+	window.language = "{{snippet.language}}";
+	window.id = "{{snippet._id}}";
+</script>
+<script src="/js/load_editor.js"></script>
+<script>
+	let users_connected = {};
+	var socket = io.connect(window.location.origin, { query: `snippetID=${window.id}` });
+	socket.emit('create', window.id);
+
+	socket.on("get_code_emit", function (data) {
+		if (data != window.editor.getDoc().getValue())
+			window.editor.getDoc().setValue(data);
+	});
+	socket.on("joined", function (data) {
+		console.log("getting data", data);
+		Object.values(data.users).forEach(user => {
+			if (!users_connected[user._id]) {
+				users_connected[user._id] = user;
+				let li = `<li class="collection-item">
+						<div>
+							<b>${user.name}</b>
+							<a href="#" class="secondary-content"><i class="material-icons">done</i></a>
+						</div>
+					</li>`;
+				$('#collection_users').append(li);
+			}
+		})
+	});
+</script>
+
+{{/section}}

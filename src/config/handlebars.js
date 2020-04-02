@@ -1,6 +1,8 @@
 import handlebars from "express-handlebars";
 import Handlebars from 'handlebars'
 import { allowInsecurePrototypeAccess } from '@handlebars/allow-prototype-access'
+import express_handlebars_sections from 'express-handlebars-sections';
+import helpers from 'handlebars-helpers';
 
 const path = __dirname + '/../../views/';
 
@@ -11,7 +13,9 @@ const hbs = handlebars({
     layoutsDir: path + "layouts/",
     partialsDir: path + "common/",
     handlebars: allowInsecurePrototypeAccess(Handlebars),
+    section: express_handlebars_sections(),
     helpers: {
+        ...helpers(),
         compare: function (lvalue, operator, rvalue, options) {
 
             var operators, result;
@@ -50,7 +54,12 @@ const hbs = handlebars({
                 return options.inverse(this);
             }
         
-        }
+        },
+        section: function(name, options) {
+            if(!this._sections){this._sections = {}};
+            this._sections[name] = options.fn(this);
+            return null;
+        },
     }
 });
 
