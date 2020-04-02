@@ -11,6 +11,8 @@ import methodOverride from 'method-override';
 import configPassport from './config/passport';
 import passportSocketIo from 'passport.socketio';
 
+require('dotenv').config()
+
 const MongoStore = require('connect-mongo')(session);
 const app = express();
 
@@ -96,7 +98,7 @@ io.on('connection', function (socket) {
     });
 });
 
-const port = process.env.port || 3000;
+const port = process.env.PORT || 3000;
 server.listen(port, () => {
-    console.log(`Server is up and running on port: http://localhost:${port}`);
+    console.log(`Server is up and running on port: ${port}`);
 });

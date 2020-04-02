@@ -26,6 +26,8 @@ var _passport3 = _interopRequireDefault(require("passport.socketio"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+require('dotenv').config();
+
 const MongoStore = require('connect-mongo')(_expressSession.default);
 
 const app = (0, _express.default)();
@@ -112,6 +114,6 @@ io.on('connection', function (socket) {
 });
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
-  console.log(`Server is up and running on port: http://localhost:${port}`);
+  console.log(`Server is up and running on port: ${port}`);
 });
 //# sourceMappingURL=index.js.map
