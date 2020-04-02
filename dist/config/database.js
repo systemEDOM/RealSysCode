@@ -4,7 +4,15 @@ var _mongoose = _interopRequireDefault(require("mongoose"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_mongoose.default.connect("mongodb://localhost:27017/realsyscode_db", {
+let env = process.env.NODE_ENV || 'development';
+
+let config = require('./mongo')[env];
+
+let envUrl = process.env[config.use_env_variable];
+let localUrl = `"mongodb://${config.host}:27017/${config.database}`;
+let mongoUrl = envUrl ? envUrl : localUrl;
+
+_mongoose.default.connect(mongoUrl, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true
