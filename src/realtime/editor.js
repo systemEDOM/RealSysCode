@@ -1,7 +1,7 @@
 let sockets = {};
 let usersByRoom = {};
 
-module.exports = function runSocket (io, passportSocketIo, passport, cookieParser, mongoStore) {
+module.exports = function runSocket(io, passportSocketIo, passport, cookieParser, mongoStore) {
     io.use(passportSocketIo.authorize({
         key: 'connect.sid',
         secret: "secret123",
@@ -37,11 +37,12 @@ module.exports = function runSocket (io, passportSocketIo, passport, cookieParse
             io.in(room).emit('joined', { users: usersByRoom });
         });
 
-
         socket.on('code_emit', function (eventData) {
-            if (socket.request.user && sockets[socket.request.user._id]) {
-                socket.broadcast.to(eventData.id).emit("get_code_emit", eventData.value);
-            }
+            socket.broadcast.to(eventData.id).emit("get_code_emit", { value: eventData.value });
+        });
+
+        socket.on('language_emit', function (eventData) {
+            socket.broadcast.to(eventData.id).emit("get_language_emit", eventData.value);
         });
 
         socket.on('disconnect', function (eventData) {
@@ -51,7 +52,7 @@ module.exports = function runSocket (io, passportSocketIo, passport, cookieParse
                 if (sock.id == socket.id) {
                     delete usersByRoom[userId];
                     sockets[userId] = null;
-                    io.to(currRoom).emit('unjoined', { user: userId });
+                    io.in(currRoom).emit('unjoined', { user: userId });
                 }
             });
         });

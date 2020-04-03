@@ -59,6 +59,7 @@
 <script>
 	window.language = "{{snippet.language}}";
 	window.id = "{{snippet._id}}";
+	window.user = "{{user._id}}";
 	window.line = 0;
 	window.ch = 0;
 	window.lineBefore = 0;
@@ -67,20 +68,20 @@
 <script src="/js/load_editor.js"></script>
 <script>
 	let users_connected = {};
-	var socket = io.connect(window.location.origin, { query: `snippetID=${window.id}` });
-	socket.emit('create', window.id);
+	window.socket = io.connect(window.location.origin, { query: `snippetID=${window.id}` });
+	window.socket.emit('create', window.id);
 
-	socket.on("get_code_emit", function (data) {
-		if (data != window.editor.getDoc().getValue()) {
+	window.socket.on("get_code_emit", function (data) {
+		if (data.value != window.editor.getDoc().getValue()) {
 			window.lineBefore = window.line;
 			window.chBefore = window.ch;
-			window.editor.getDoc().setValue(data);
+			window.editor.getDoc().setValue(data.value);
 			window.editor.setCursor({line: window.lineBefore - 1, ch: window.chBefore - 1});
-			console.log(window.line, window.ch, "from emit");
+			// console.log(window.line, window.ch, "from emit");
 		}
 	});
-	socket.on("joined", function (data) {
-		console.log("getting data", data);
+	window.socket.on("joined", function (data) {
+		// console.log("getting data", data);
 		Object.values(data.users).forEach(user => {
 			if (user !== null && !users_connected[user._id]) {
 				users_connected[user._id] = user;
@@ -94,9 +95,13 @@
 			}
 		})
 	});
+	window.socket.on("get_language_emit", function (data) {
+		$("#language").val(data);
+		$('#language').formSelect();
+	});
 
-	socket.on("unjoined", function (data) {
-		console.log("getting data unjoined", data);
+	window.socket.on("unjoined", function (data) {
+		// console.log("getting data unjoined", data);
 		$(`#${data.user}`).remove();
 		delete users_connected[data.user];
 	});

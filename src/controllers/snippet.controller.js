@@ -34,7 +34,7 @@ const UserController = {
     },
     show: async (req, res) => {
         const snippet = await SnippetRepository.findBySlug(req.params.slug);
-        res.render('snippets/show_snippet', { snippet });
+        res.render('snippets/show_snippet', { snippet, user: req.user });
     },
 };
 

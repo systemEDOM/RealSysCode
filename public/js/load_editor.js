@@ -1,3 +1,4 @@
+window.onCursorActive = false;
 getEditor(window.language);
 
 $("#language").change(function () {
@@ -8,6 +9,7 @@ $("#language").change(function () {
         success: function (response) {
             M.toast({ html: 'Updated your language' });
             getEditor($("#language").val());
+            window.socket.emit('language_emit', { id: window.id, value: $("#language").val() });
         },
         error: function (response) {
             M.toast({ html: 'Error updating your language' });
@@ -65,19 +67,19 @@ function getEditor(language) {
         const cursor = editor.getCursor();
         window.line = cursor.line + 1;
         window.ch = ch + 1;
-        console.log(window.line, window.ch);
+        // console.log(window.line, window.ch);
     }
 
     window.editor.on("cursorActivity", onCursorActivity);
 
-    window.editor.on('change', function (cMirror, changeObj) {
-        console.log("here", changeObj.to.line);
+    window.editor.on('keyup', function (cMirror, changeObj) {
+        // console.log("here", changeObj.to.line);
         $.ajax({
             url: '/snippets/updateByAjax/' + window.id,
             type: 'PUT',
             data: "code=" + cMirror.getValue(),
             success: function (response) {
-                socket.emit('code_emit', { id: window.id, value: cMirror.getValue() });
+                window.socket.emit('code_emit', { id: window.id, value: cMirror.getValue() });
             },
             error: function (response) {
                 M.toast({ html: 'Error updating your code' });
