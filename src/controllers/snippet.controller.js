@@ -18,7 +18,7 @@ const UserController = {
                 req.flash('success', "Snippet created successfully. Now write your code!");
                 res.status(200).redirect(`/snippets/${newSnippet.slug}`);
             }).catch(error => {
-                console.log(error);
+                // console.log(error);
                 req.flash('error', "An error has occured");
                 res.status(400).redirect("/snippets/create");
             });
@@ -28,13 +28,24 @@ const UserController = {
             .then(newSnippet => {
                 res.status(200).json({ message: "Saved successfully" });
             }).catch(error => {
-                console.log(error);
+                // console.log(error);
                 res.status(400).json({ message: "An error has occured" });
             });
     },
     show: async (req, res) => {
         const snippet = await SnippetRepository.findBySlug(req.params.slug);
         res.render('snippets/show_snippet', { snippet, user: req.user });
+    },
+    delete: async (req, res) => {
+        await SnippetRepository.delete(req.params.id)
+            .then(result => {
+                req.flash('success', "Snippet deleted successfully!");
+                res.status(200).redirect(req.header('Referer'));
+            }).catch(error => {
+                // console.log(error);
+                req.flash('error', "An error has occured");
+                res.status(400).redirect(req.header('Referer'));
+            });
     },
 };
 

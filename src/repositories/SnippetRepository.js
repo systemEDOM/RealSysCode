@@ -11,7 +11,7 @@ class SnippetRepository {
 
     async create(snippetObject) {
         const snippet = await this.model.create(snippetObject)
-        await UserRepository.findOneAndUpdate({ _id: snippetObject.user }, {$push: {snippets: snippet._id}}, { new: true });
+        await UserRepository.findOneAndUpdate({ _id: snippetObject.user }, { $push: { snippets: snippet._id } }, { new: true });
         return snippet;
     }
 
@@ -23,8 +23,12 @@ class SnippetRepository {
         return await this.model.findOne({ slug });
     }
 
-    async findById(id, callback) {
+    async findById(id) {
         return await this.model.findById(id);
+    }
+
+    async delete(_id) {
+        return await this.model.remove({ _id });
     }
 }
 

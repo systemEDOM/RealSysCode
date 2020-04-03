@@ -44,8 +44,14 @@ class SnippetRepository {
     });
   }
 
-  async findById(id, callback) {
+  async findById(id) {
     return await this.model.findById(id);
+  }
+
+  async delete(_id) {
+    return await this.model.remove({
+      _id
+    });
   }
 
 }

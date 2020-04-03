@@ -39,8 +39,8 @@ const UserController = {
   profile: async (req, res) => {
     await _UserRepository.default.findByUsername(req.params.username).then(async userFound => {
       if (userFound === null) {
-        req.flash("errorNotFound", "An error has ocurred may be the user doesn't exist");
-        res.render('profile');
+        req.flash("errorNotFound", "An error has ocurred may be the page doesn't exist");
+        res.render('404');
       } else {
         const snippetsByUser = await _UserRepository.default.snippetsByUser(userFound._id);
         res.render('profile', {

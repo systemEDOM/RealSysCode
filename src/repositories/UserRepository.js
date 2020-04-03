@@ -23,7 +23,7 @@ class UserRepository {
     }
 
     async snippetsByUser(_id) {
-        return await this.model.findOne({ _id }).populate("snippets");
+        return await this.model.findById(_id).populate("snippets");
     }
 
     async findOne(email) {

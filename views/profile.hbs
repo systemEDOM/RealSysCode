@@ -1,7 +1,4 @@
 <div class="container">
-    {{#if message.errorNotFound}}
-    {{> errors }}
-    {{else}}
     <div class="row">
         {{> success }}
         {{> errors }}
@@ -42,10 +39,15 @@
                             {{#each snippetsByUser.snippets}}
                             <li class="collection-item">
                                 <div>
-                                    <b>{{this.title}}</b>
+                                    <a href="/snippets/{{this.slug}}"><b>{{this.title}}</b></a>
                                     <br>
                                     {{this.short_description}}
-                                    <a href="/snippets/{{this.slug}}" class="secondary-content"><i class="material-icons">send</i></a>
+                                    <a href="/snippets/{{this.slug}}"
+                                        onclick="event.preventDefault(); document.getElementById('delete{{this._id}}').submit();"
+                                        class="secondary-content"><i class="material-icons">delete</i></a>
+                                    <form id="delete{{this._id}}" action="/snippets/{{this._id}}?_method=DELETE"
+                                        method="POST" style="display: none;">
+                                    </form>
                                 </div>
                             </li>
                             {{/each}}
@@ -55,5 +57,4 @@
             </div>
         </div>
     </div>
-    {{/if}}
 </div>

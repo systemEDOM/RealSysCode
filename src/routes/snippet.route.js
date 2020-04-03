@@ -9,5 +9,6 @@ router.get("/create", AuthMiddleware, SnippetController.create);
 router.post("/store", AuthMiddleware, SnippetValidation, SnippetController.store);
 router.get("/:slug", AuthMiddleware, SnippetController.show);
 router.put("/updateByAjax/:id", AuthMiddleware, SnippetController.updateByAjax);
+router.delete("/:id", AuthMiddleware, SnippetController.delete);
 
 module.exports = router;
