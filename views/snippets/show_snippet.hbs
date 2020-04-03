@@ -59,11 +59,6 @@
 <script>
 	window.language = "{{snippet.language}}";
 	window.id = "{{snippet._id}}";
-	window.user = "{{user._id}}";
-	window.line = 0;
-	window.ch = 0;
-	window.lineBefore = 0;
-	window.chBefore = 0;
 </script>
 <script src="/js/load_editor.js"></script>
 <script>
@@ -73,22 +68,19 @@
 
 	window.socket.on("get_code_emit", function (data) {
 		if (data.value != window.editor.getDoc().getValue()) {
-			window.lineBefore = window.line;
-			window.chBefore = window.ch;
+			let currCursor = window.editor.getCursor();
 			window.editor.getDoc().setValue(data.value);
-			window.editor.setCursor({line: window.lineBefore - 1, ch: window.chBefore - 1});
-			// console.log(window.line, window.ch, "from emit");
+			window.editor.setCursor(currCursor);
 		}
 	});
 	window.socket.on("joined", function (data) {
-		// console.log("getting data", data);
 		Object.values(data.users).forEach(user => {
 			if (user !== null && !users_connected[user._id]) {
 				users_connected[user._id] = user;
 				let li = `<li class="collection-item" id="${user._id}">
 						<div>
-							<b>${user.name}</b>
-							<a href="#" class="secondary-content"><i class="material-icons">done</i></a>
+							<a href="/users/profile/${user.slugUsername}">${user.name}</a>
+							<a href="/users/profile/${user.slugUsername}" class="secondary-content"><i class="material-icons">check_circle</i></a>
 						</div>
 					</li>`;
 				$('#collection_users').append(li);
@@ -97,11 +89,11 @@
 	});
 	window.socket.on("get_language_emit", function (data) {
 		$("#language").val(data);
+		getEditor($("#language").val());
 		$('#language').formSelect();
 	});
 
 	window.socket.on("unjoined", function (data) {
-		// console.log("getting data unjoined", data);
 		$(`#${data.user}`).remove();
 		delete users_connected[data.user];
 	});

@@ -48,11 +48,15 @@ module.exports = function runSocket(io, passportSocketIo, passport, cookieParser
         socket.on('disconnect', function (eventData) {
             console.log("Client disconnected");
             Object.keys(sockets).forEach(userId => {
-                let sock = sockets[userId];
-                if (sock.id == socket.id) {
-                    delete usersByRoom[userId];
-                    sockets[userId] = null;
-                    io.in(currRoom).emit('unjoined', { user: userId });
+                try {
+                    let sock = sockets[userId];
+                    if (sock.id == socket.id) {
+                        delete usersByRoom[userId];
+                        sockets[userId] = null;
+                        io.in(currRoom).emit('unjoined', { user: userId });
+                    }
+                } catch (error) {
+                    console.log(error, "disconnecting client");
                 }
             });
         });
